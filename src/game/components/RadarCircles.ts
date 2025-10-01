@@ -24,13 +24,7 @@ export class RadarCircles {
    }
 
    init() {
-      const minCircle = new Graphics()
-         .circle(this.maxRadius, this.maxRadius, this.minRadius)
-         .fill({ color: "#0088ff" });
-      this.container.addChild(minCircle);
-
       this.circlesData = [];
-
       // Doiralarni yaratish
       for (let index = 0; index < 3; index++) {
          const circle = new Graphics()
@@ -47,7 +41,7 @@ export class RadarCircles {
       }
    }
 
-   startAnimation(speed = 1.3) {
+   startAnimation(speed = 1.5) {
       const now = performance.now();
 
       this.circlesData.forEach((data) => {

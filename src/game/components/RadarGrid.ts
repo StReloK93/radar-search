@@ -1,6 +1,6 @@
 import { Graphics } from "pixi.js";
 
-export function grid(width: number, height: number, spacing: number = 12) {
+export function radarGrid(width: number, height: number, spacing: number = 12) {
    const grid = new Graphics();
 
    // Vertikal chiziqlar
