@@ -29,7 +29,7 @@ export class RadarCircles {
       for (let index = 0; index < 3; index++) {
          const circle = new Graphics()
             .circle(this.maxRadius, this.maxRadius, this.minRadius)
-            .stroke({ width: 1, color: "#005096", alpha: 1 });
+            .stroke({ width: 1, color: "#666", alpha: 1 });
          this.container.addChild(circle);
 
          this.circlesData.push({
@@ -54,7 +54,7 @@ export class RadarCircles {
          data.circle
             .clear()
             .circle(this.maxRadius, this.maxRadius, data.radius)
-            .stroke({ width: 2, color: "#005096", alpha });
+            .stroke({ width: 2, color: "#666", alpha });
 
          if (data.radius > this.maxRadius - 1) data.radius = this.minRadius;
       });

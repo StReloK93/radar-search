@@ -14,7 +14,7 @@ export function radarGrid(width: number, height: number, spacing: number = 12) {
    }
 
    // Chiziqni oq rangda, pixel-perfect qilib chizish
-   grid.stroke({ color: '#0088ff', width: 1, pixelLine: true, alpha: 0.15 });
+   grid.stroke({ color: '#888', width: 1, pixelLine: true, alpha: 0.15 });
 
    return grid;
 }

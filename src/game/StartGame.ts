@@ -1,7 +1,7 @@
 // MapApp.ts
 import type { IPoint } from "../Interfaces";
 import { Application, Container, Graphics } from "pixi.js";
-import { projectToRadar, FPSIndicator, randomHexColor } from "./helpers";
+import { projectToRadar } from "./helpers";
 import { RadarCircles } from "./components/RadarCircles";
 import { radarGrid } from "./components/RadarGrid";
 
@@ -9,20 +9,20 @@ export class StartGame {
    app: Application;
    mapContainer: Container;
    maxCenter: number;
-   points: IPoint[]
+   circles: Graphics[]
    beforeInit: (() => void) | null
-   constructor(parentNode: HTMLElement, points: IPoint[]) {
+   constructor(parentNode: HTMLElement) {
+      this.circles = []
       this.beforeInit = null
       this.app = new Application();
       this.mapContainer = new Container();
       this.maxCenter = 0;
-      this.points = points
       this.init(parentNode);
    }
 
    async init(parentNode: HTMLElement) {
       // globalThis.__PIXI_APP__ = this.app;
-      await this.app.init({ resizeTo: parentNode, background: "#010027" });
+      await this.app.init({ resizeTo: parentNode, background: "#000" });
       this.app.stage.addChild(this.mapContainer);
       parentNode.appendChild(this.app.canvas as HTMLCanvasElement);
       this.maxCenter = this.app.canvas.width / 2;
@@ -30,9 +30,9 @@ export class StartGame {
       this.userPoint();
       this.radarCircles();
 
-      const backgroundGrid = radarGrid(this.app.canvas.width, this.app.canvas.height, 24);
+      const backgroundGrid = radarGrid(this.app.canvas.width, this.app.canvas.height, 12);
       this.mapContainer.addChild(backgroundGrid);
-      this.mapContainer.addChild(FPSIndicator());
+      // this.mapContainer.addChild(FPSIndicator());
 
       if(this.beforeInit) this.beforeInit()
 
@@ -41,7 +41,7 @@ export class StartGame {
 
 
    userPoint() {
-      const minCircle = new Graphics().circle(this.maxCenter, this.maxCenter, 20).fill({ color: "#0088ff" });
+      const minCircle = new Graphics().circle(this.maxCenter, this.maxCenter, 20).fill({ color: "#222" });
       this.mapContainer.addChild(minCircle);
    }
 
@@ -60,8 +60,13 @@ export class StartGame {
       const distanceSort = points.map((p) => projectToRadar(p, center));
 
       distanceSort.sort((a, b) => a.dist - b.dist);
-
       this.paintDots(distanceSort, radarRadius, radarCenter);
+   }
+
+   clearCircles(){
+      this.circles.forEach((circle) => {
+         circle.destroy()
+      })
    }
 
    paintDots(
@@ -85,6 +90,7 @@ export class StartGame {
          const y = radarCenter.y + projected.y * scale;
 
          const dot = this.createBouncyDot(x, y);
+         this.circles.push(dot)
          this.mapContainer.addChild(dot);
       }
 
@@ -95,9 +101,9 @@ export class StartGame {
 
    createBouncyDot(x: number, y: number) {
       const dot = new Graphics()
-         .circle(0, 0, 15)
-         .fill({ color: randomHexColor(), alpha: 0.6 })
-         .stroke({ width: 1, color: "#84c6ff", alpha: 0.5 });
+         .circle(0, 0, 12)
+         .fill({ color: '#666', alpha: 0.6 })
+         .stroke({ width: 1, color: "#333", alpha: 0.5 });
 
       dot.x = x;
       dot.y = y;
