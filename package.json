@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@tma.js/bridge": "^2.0.2",
     "pixi-filters": "^6.1.4",
     "pixi.js": "^8.13.2",
     "tailwindcss": "^4.1.13",

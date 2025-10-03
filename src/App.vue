@@ -1,5 +1,5 @@
 <template>
-   <section class="h-dvh p-2 bg-zinc-950">
+   <section class="h-dvh p-1 bg-zinc-950">
       <GameWindow />
    </section>
 </template>

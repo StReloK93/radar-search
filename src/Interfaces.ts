@@ -11,3 +11,25 @@ export interface IPoint {
    lat: number;
    lon: number;
 }
+
+export interface IUser {
+   id: number;
+   name: string;
+   username: string;
+   avatar: string;
+   lat: number;
+   lon: number;
+}
+
+export interface IUserDist {
+   id: number;
+   name: string;
+   username: string;
+   avatar: string;
+   lat: number;
+   lon: number;
+   x: number,
+   dist: number,
+   y: number
+}
+
