@@ -1,7 +1,7 @@
 <template>
-   <main class="flex flex-col h-full w-full max-w-96 border border-zinc-600">
+   <main class="flex flex-col h-full w-full max-w-[440px] border border-zinc-600">
       <div
-         class="flex w-full max-w-96 aspect-square overflow-hidden border-b border-zinc-700 shadow-inner"
+         class="flex w-full aspect-square overflow-hidden border-b border-zinc-700 shadow-inner"
          ref="canvasParent"
       />
       <section class="flex-grow relative">

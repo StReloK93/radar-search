@@ -74,3 +74,24 @@ export function randomHexColor(): string {
       .padStart(6, "0");
    return `#${hex}`;
 }
+
+export function requestUserLocation(
+   callback: (err: GeolocationPositionError | null, coordinate: { lat: number; lon: number } | null) => void
+) {
+   if (!navigator.geolocation) {
+      alert("Brauzeringiz geolocation-ni qo‘llamaydi.");
+      return;
+   }
+
+   navigator.geolocation.getCurrentPosition(
+      (pos) => {
+         const lat = pos.coords.latitude;
+         const lon = pos.coords.longitude;
+         callback(null, { lat, lon });
+      },
+      (err) => {
+         callback(err, null);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+   );
+}
