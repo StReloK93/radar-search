@@ -1,11 +1,8 @@
 import { createApp } from "vue";
+import { createPinia } from 'pinia'
 import "./style.css";
 import App from "./App.vue";
-import { isTMA, retrieveLaunchParams } from "@tma.js/bridge";
 
-if (isTMA()) {
-   const { tgWebAppData } = retrieveLaunchParams();
-   console.log("launchParams:", tgWebAppData?.user);
-}
-
-createApp(App).mount("#app");
+createApp(App)
+.use(createPinia())
+.mount("#app");
