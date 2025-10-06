@@ -79,7 +79,7 @@ export class StartGame {
          const x = radarCenter.x + user.x * scale;
          const y = radarCenter.y + user.y * scale;
 
-         const dot = await this.createBouncyDot(x, y, user.avatar);
+         const dot = await this.createBouncyDot(x, y, user.photo);
          dot.on("click", () => {
             console.log(user);
          });

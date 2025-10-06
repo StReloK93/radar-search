@@ -8,21 +8,22 @@
          <main class="absolute inset-0 overflow-hidden overflow-y-auto scrollbar">
             <div
                v-for="user in userDistance"
-               :key="user.id"
+               :key="user.user_id"
                class="p-2 flex gap-3 items-center"
             >
                <aside>
                   <img
-                     :src="user.avatar"
+                     :src="user.photo"
                      class="w-8 aspect-square rounded-full grayscale"
                   >
                </aside>
                <aside class="leading-none flex-grow">
                   <h3 class="text-zinc-300 flex justify-between w-full">
                      <span>
-                        {{ user.name }}
+                        {{ user.first_name }}
                      </span>
-                     <span class="text-sm leading-none text-zinc-600 font-bold"> {{ Math.round(user.dist/10) / 100 }} Km</span>
+                     <span class="text-sm leading-none text-zinc-600 font-bold">
+                        {{ Math.round(user.dist / 10) / 100 }} Km</span>
                   </h3>
                   <div class="text-zinc-500">
                      <a :href="`https://t.me/username='${user.username}'`">{{ user.username }}</a>
@@ -42,19 +43,19 @@ import type { IUser, IUserDist } from "../Interfaces";
 const canvasParent: Ref<HTMLElement | null> = ref(null);
 
 let game: StartGame | null = null;
-const userDistance: Ref<IUserDist[]> = ref([])
+const userDistance: Ref<IUserDist[]> = ref([]);
 function getData() {
    const users = [
-      { id: 1, name: "Aziz Soliyev", username: "ruzzifer", avatar: "/public/batman.jpg" },
-      { id: 2, name: "Nodira Karimova", username: "nodira.k", avatar: "/public/batman.jpg" },
-      { id: 3, name: "Jahongir Rustamov", username: "jahongir.r", avatar: "/public/batman.jpg" },
-      { id: 4, name: "Lola Isroilova", username: "lola.i", avatar: "/public/batman.jpg" },
-      { id: 5, name: "Bekzod Xusanov", username: "bekzod.x", avatar: "/public/batman.jpg" },
-      { id: 6, name: "Malika Sharipova", username: "malika.s", avatar: "/public/batman.jpg" },
-      { id: 7, name: "Oybek Tursunov", username: "oybek.t", avatar: "/public/batman.jpg" },
-      { id: 8, name: "Gulnora Nazarova", username: "gulnora.n", avatar: "/public/batman.jpg" },
-      { id: 9, name: "Sardor Qodirov", username: "sardor.q", avatar: "/public/batman.jpg" },
-      { id: 10, name: "Dilorom Egamberdiyeva", username: "dilorom.e", avatar: "/public/batman.jpg" },
+      { user_id: 1, first_name: "Aziz Soliyev", last_name: "", username: "ruzzifer", photo: "/public/batman.jpg" },
+      { user_id: 2, first_name: "Nodira Karimova", last_name: "", username: "nodira.k", photo: "/public/batman.jpg" },
+      {
+         user_id: 3,
+         first_name: "Jahongir Rustamov",
+         last_name: "",
+         username: "jahongir.r",
+         photo: "/public/batman.jpg",
+      },
+      { user_id: 4, first_name: "Lola Isroilova", last_name: "", username: "lola.i", photo: "/public/batman.jpg" },
    ];
 
    const points = generateRandomPoints({ lat: 41.3111, lon: 69.2797 }, 10, 10);
@@ -80,7 +81,7 @@ onMounted(async () => {
       };
 
       game.onUpdateUsers = (users) => {
-         userDistance.value = users
+         userDistance.value = users;
       };
    }
 });

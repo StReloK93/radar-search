@@ -13,35 +13,38 @@ export interface IPoint {
 }
 
 export interface IUser {
-   id: number;
-   name: string;
+   first_name: string;
+   last_name: string;
    username: string;
-   avatar: string;
+   user_id: number;
+   photo: string;
+   last_active_time?: string | null;
    lat: number;
    lon: number;
 }
 
 export interface IUserDist {
-   id: number;
-   name: string;
+   first_name: string;
+   last_name: string;
    username: string;
-   avatar: string;
+   user_id: number;
+   photo: string;
    lat: number;
    lon: number;
    x: number;
-   dist: number;
    y: number;
+   dist: number;
 }
 
 export interface IAuthUser {
    added_to_attachment_menu?: boolean | undefined;
-   allows_write_to_pm?: boolean | undefined;
    first_name: string;
-   id: number;
+   user_id: number;
    is_bot?: boolean | undefined;
    is_premium?: boolean | undefined;
    last_name?: string | undefined;
-   language_code?: string | undefined;
    photo_url?: string | undefined;
    username?: string | undefined;
+   lat: number | null;
+   lon: number | null;
 }
