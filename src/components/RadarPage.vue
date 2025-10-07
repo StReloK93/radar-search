@@ -1,9 +1,20 @@
 <template>
-   <main class="flex flex-col h-full w-full max-w-[440px] border border-zinc-600">
+   <main class="flex flex-col h-full w-full max-w-[440px] border border-zinc-800">
       <div
-         class="flex w-full aspect-square overflow-hidden border-b border-zinc-700 shadow-inner"
+         class="flex w-full aspect-square overflow-hidden border-b border-zinc-800 shadow-inner"
          ref="canvasParent"
       />
+      <div class="flex border-b border-zinc-800">
+         <button
+            v-for="rad in aviableRadiuses"
+            :key="rad"
+            :class="{'bg-zinc-800': radius == rad}"
+            @click="getData(rad)"
+            class="px-2 flex-grow border-x border-zinc-800 text-xs py-1"
+         >
+            {{ rad }} km
+         </button>
+      </div>
       <section class="flex-grow relative">
          <main class="absolute inset-0 overflow-hidden overflow-y-auto scrollbar">
             <div
@@ -26,7 +37,7 @@
                         {{ Math.round(user.dist / 10) / 100 }} Km</span>
                   </h3>
                   <div class="text-zinc-500">
-                     <a :href="`https://t.me/username='${user.username}'`">{{ user.username }}</a>
+                     <a :href="`tg://user?id=${user.username}`">{{ user.username }}</a>
                   </div>
                </aside>
             </div>
@@ -38,37 +49,37 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, type Ref } from "vue";
 import { StartGame } from "../game/StartGame";
-import { generateRandomPoints } from "../game/helpers";
-import type { IUser, IUserDist } from "../Interfaces";
+import type { IUserDist } from "../Interfaces";
+import { useUserInformation } from "../store/User";
 const canvasParent: Ref<HTMLElement | null> = ref(null);
+const UserStore = useUserInformation();
 
 let game: StartGame | null = null;
 const userDistance: Ref<IUserDist[]> = ref([]);
-function getData() {
-   const users = [
-      { user_id: 1, first_name: "Aziz Soliyev", last_name: "", username: "ruzzifer", photo: "/public/batman.jpg" },
-      { user_id: 2, first_name: "Nodira Karimova", last_name: "", username: "nodira.k", photo: "/public/batman.jpg" },
-      {
-         user_id: 3,
-         first_name: "Jahongir Rustamov",
-         last_name: "",
-         username: "jahongir.r",
-         photo: "/public/batman.jpg",
+
+const aviableRadiuses = [5,10,25,50,100,200]
+
+const radius: Ref<number> = ref(10);
+async function getData(currentRadius: number) {
+   radius.value = currentRadius
+   const res = await fetch("https://radarbackend-production.up.railway.app/get-user/nearby", {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
       },
-      { user_id: 4, first_name: "Lola Isroilova", last_name: "", username: "lola.i", photo: "/public/batman.jpg" },
-   ];
-
-   const points = generateRandomPoints({ lat: 41.3111, lon: 69.2797 }, 10, 10);
-   const newData: IUser[] = users.map((user, index) => {
-      return {
-         ...user,
-         ...points[index]!,
-      };
+      body: JSON.stringify({
+         user_id: UserStore.user?.user_id,
+         lat: UserStore.user?.lat,
+         lon: UserStore.user?.lon,
+         radius: currentRadius,
+      }),
    });
+   if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+   const data = await res.json();
 
-   if (game) {
+   if (game && UserStore.user?.lat && UserStore.user?.lon) {
       game.clearCircles();
-      game?.pointsByCoordinate({ lat: 41.3111, lon: 69.2797 }, 10 * 1000, newData);
+      game?.pointsByCoordinate({ lat: UserStore.user.lat, lon: UserStore.user.lon }, radius.value * 1000, data);
    }
 }
 
@@ -76,9 +87,7 @@ onMounted(async () => {
    if (canvasParent.value) game = new StartGame(canvasParent.value);
 
    if (game) {
-      game.onBeforeInit = () => {
-         getData();
-      };
+      game.onBeforeInit = () => getData(radius.value);
 
       game.onUpdateUsers = (users) => {
          userDistance.value = users;

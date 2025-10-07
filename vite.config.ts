@@ -5,6 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
    plugins: [vue(), tailwindcss()],
    server: {
-      allowedHosts: [".loca.lt"], // barcha loca.lt subdomenlariga ruxsat beradi
+      allowedHosts: [".loclx.io"], // barcha loca.lt subdomenlariga ruxsat beradi
    },
 });

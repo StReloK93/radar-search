@@ -1,6 +1,6 @@
 <template>
-   <section class="h-full bg-zinc-900 rounded-md">
-      <main class="h-full w-full p-2 pt-6">
+   <section class="h-full bg-zinc-900 rounded-md flex items-center">
+      <main class="w-full p-2 -mt-16">
          <div
             class="w-16 h-16 shadow-2xl shadow-black rounded-full border-2 mx-auto flex justify-center items-center mb-4"
          >
@@ -31,7 +31,7 @@
                Qidirish
             </button>
             <span v-else>
-               Loading...
+               Yuklanmoqda...
             </span>
          </div>
       </main>
@@ -60,7 +60,7 @@ function getLocation() {
 }
 
 async function updateCurrentUser(user: IAuthUser) {
-   fetch("http://192.168.14.173:3000/create-user", {
+   fetch("https://radarbackend-production.up.railway.app/create-user", {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
