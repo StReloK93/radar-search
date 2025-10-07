@@ -57,7 +57,7 @@ const UserStore = useUserInformation();
 let game: StartGame | null = null;
 const userDistance: Ref<IUserDist[]> = ref([]);
 
-const aviableRadiuses = [5,10,25,50,100,200]
+const aviableRadiuses = [1, 5,10,25,50,100,200]
 
 const radius: Ref<number> = ref(10);
 async function getData(currentRadius: number) {
