@@ -39,13 +39,19 @@ export class StartGame {
    }
 
    async init(parentNode: HTMLElement) {
-      await this.app.init({ resizeTo: parentNode, background: "#000" });
+      await this.app.init({
+         resizeTo: parentNode,
+         resolution: 1,
+         antialias: true,
+         autoDensity: true,
+         background: "#18181b",
+      });
       this.app.stage.addChild(this.mapContainer);
       parentNode.appendChild(this.app.canvas as HTMLCanvasElement);
       this.maxCenter = this.app.canvas.width / 2;
 
       this.userPoint();
-      this.radarCircles();
+      // this.radarCircles();
 
       const backgroundGrid = radarGrid(this.app.canvas.width, this.app.canvas.height, 12);
       this.mapContainer.addChild(backgroundGrid);
@@ -99,8 +105,7 @@ export class StartGame {
       container.eventMode = "static";
       container.cursor = "pointer";
       const texture = await Assets.load({ src: avatarUrl, parser: "texture" });
-
-      const circle = new Graphics().circle(0, 0, 15).fill(texture).stroke({ width: 1, color: "#aaa", alpha: 0.4 });
+      const circle = new Graphics().circle(0, 0, 20).fill(texture).stroke({ width: 1, color: "#000" });
       container.scale.set(0);
 
       container.addChild(circle);
@@ -129,9 +134,7 @@ export class StartGame {
    }
 
    clearCircles() {
-      this.circles.forEach((circle) => {
-         circle.destroy();
-      });
+      this.circles.forEach((circle) => circle.destroy());
    }
 
    destroyGame() {

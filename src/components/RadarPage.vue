@@ -1,26 +1,35 @@
 <template>
-   <main class="flex flex-col h-full w-full max-w-[440px] border border-zinc-800">
+   <main class="flex flex-col h-full w-full max-w-[440px]">
+      <header class="mb-2 flex">
+         <div class="flex items-center gap-2 bg-zinc-900 px-1 py-0.5 rounded-2xl border border-zinc-800">
+            <img
+               :src="UserStore.user?.photo_url"
+               class="w-7 aspect-square rounded-full grayscale"
+            >
+            <span class="mr-0.5">{{ UserStore.user?.first_name }}</span>
+         </div>
+      </header>
       <div
-         class="flex w-full aspect-square overflow-hidden border-b border-zinc-800 shadow-inner"
+         class="flex w-full aspect-square overflow-hidden border border-zinc-950 rounded-2xl shadow-inner"
          ref="canvasParent"
       />
-      <div class="flex border-b border-zinc-800">
+      <div class="flex gap-1 mt-2 justify-between">
          <button
             v-for="rad in aviableRadiuses"
             :key="rad"
             :class="{'bg-zinc-800': radius == rad}"
             @click="getData(rad)"
-            class="px-2 flex-grow border-x border-zinc-800 text-xs py-1"
+            class="w-10 border rounded-2xl border-zinc-800 text-[10px] py-1"
          >
-            {{ rad }} km
+            {{ rad }}km
          </button>
       </div>
-      <section class="flex-grow relative">
+      <section class="flex-grow relative -mx-2">
          <main class="absolute inset-0 overflow-hidden overflow-y-auto scrollbar">
             <div
                v-for="user in userDistance"
                :key="user.user_id"
-               class="p-2 flex gap-3 items-center"
+               class="p-2 flex gap-2 items-center"
             >
                <aside>
                   <img
@@ -37,7 +46,7 @@
                         {{ Math.round(user.dist / 10) / 100 }} Km</span>
                   </h3>
                   <div class="text-zinc-500">
-                     <a :href="`tg://user?id=${user.username}`">{{ user.username }}</a>
+                     {{ user.username }}
                   </div>
                </aside>
             </div>
@@ -57,7 +66,7 @@ const UserStore = useUserInformation();
 let game: StartGame | null = null;
 const userDistance: Ref<IUserDist[]> = ref([]);
 
-const aviableRadiuses = [1, 5,10,25,50,100,200]
+const aviableRadiuses = [1,3,5,10,25,50,100]
 
 const radius: Ref<number> = ref(10);
 async function getData(currentRadius: number) {
