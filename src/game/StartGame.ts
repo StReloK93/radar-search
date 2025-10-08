@@ -85,7 +85,7 @@ export class StartGame {
          const x = radarCenter.x + user.x * scale;
          const y = radarCenter.y + user.y * scale;
 
-         const dot = await this.createBouncyDot(x, y, user.photo);
+         const dot = await this.createBouncyDot(x, y, user.photo_url);
          dot.on("click", () => {
             console.log(user);
          });
@@ -104,7 +104,10 @@ export class StartGame {
       container.y = y;
       container.eventMode = "static";
       container.cursor = "pointer";
-      const texture = await Assets.load({ src: avatarUrl, parser: "texture" });
+      const proxyUrl = "https://corsproxy.io/?";
+      // const texture = await Assets.load(proxyUrl + avatarUrl);
+
+      const texture = await Assets.load({ src: proxyUrl + avatarUrl, parser: "texture" });
       const circle = new Graphics().circle(0, 0, 20).fill(texture).stroke({ width: 1, color: "#000" });
       container.scale.set(0);
 

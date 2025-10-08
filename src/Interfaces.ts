@@ -18,6 +18,7 @@ export interface IUser {
    username: string;
    user_id: number;
    photo: string;
+   photo_url: string;
    last_active_time?: string | null;
    lat: number;
    lon: number;
@@ -29,6 +30,7 @@ export interface IUserDist {
    username: string;
    user_id: number;
    photo: string;
+   photo_url: string;
    lat: number;
    lon: number;
    x: number;

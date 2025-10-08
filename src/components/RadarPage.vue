@@ -13,13 +13,13 @@
          class="flex w-full aspect-square overflow-hidden border border-zinc-950 rounded-2xl shadow-inner"
          ref="canvasParent"
       />
-      <div class="flex gap-1 mt-2 justify-between">
+      <div class="flex gap-2 mt-2 justify-between">
          <button
             v-for="rad in aviableRadiuses"
             :key="rad"
             :class="{'bg-zinc-800': radius == rad}"
             @click="getData(rad)"
-            class="w-10 border rounded-2xl border-zinc-800 text-[10px] py-1"
+            class="flex-grow border rounded-md border-zinc-800 text-[11px] py-1"
          >
             {{ rad }}km
          </button>
@@ -33,7 +33,7 @@
             >
                <aside>
                   <img
-                     :src="user.photo"
+                     :src="user.photo_url"
                      class="w-8 aspect-square rounded-full grayscale"
                   >
                </aside>
