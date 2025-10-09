@@ -17,7 +17,7 @@
          <button
             v-for="rad in aviableRadiuses"
             :key="rad"
-            :class="{'bg-zinc-800': radius == rad}"
+            :class="{ 'bg-zinc-800': radius == rad }"
             @click="getData(rad)"
             class="flex-grow border rounded-md border-zinc-800 text-[11px] py-1"
          >
@@ -33,7 +33,7 @@
             >
                <aside>
                   <img
-                     :src="user.photo_url"
+                     :src="user.photo"
                      class="w-8 aspect-square rounded-full grayscale"
                   >
                </aside>
@@ -43,7 +43,7 @@
                         {{ user.first_name }}
                      </span>
                      <span class="text-sm leading-none text-zinc-600 font-bold">
-                        {{ Math.round(user.dist / 10) / 100 }} Km</span>
+                        {{ Math.round(user.dist! / 10) / 100 }} Km</span>
                   </h3>
                   <div class="text-zinc-500">
                      {{ user.username }}
@@ -58,37 +58,29 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, type Ref } from "vue";
 import { StartGame } from "../game/StartGame";
-import type { IUserDist } from "../Interfaces";
+import UserRepository from "../repositories/UserRepository";
+import type { IUser } from "../Interfaces";
 import { useUserInformation } from "../store/User";
 const canvasParent: Ref<HTMLElement | null> = ref(null);
 const UserStore = useUserInformation();
 
 let game: StartGame | null = null;
-const userDistance: Ref<IUserDist[]> = ref([]);
+const userDistance: Ref<IUser[]> = ref([]);
 
-const aviableRadiuses = [1,3,5,10,25,50,100]
+const aviableRadiuses = [1, 3, 5, 10, 25, 50, 100];
 
 const radius: Ref<number> = ref(10);
 async function getData(currentRadius: number) {
-   radius.value = currentRadius
-   const res = await fetch("https://radarbackend-production.up.railway.app/get-user/nearby", {
-      method: "POST",
-      headers: {
-         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-         user_id: UserStore.user?.user_id,
-         lat: UserStore.user?.lat,
-         lon: UserStore.user?.lon,
-         radius: currentRadius,
-      }),
-   });
-   if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-   const data = await res.json();
+   radius.value = currentRadius;
 
-   if (game && UserStore.user?.lat && UserStore.user?.lon) {
+   if (game && UserStore.location && UserStore.user) {
+      const users = await UserRepository.getUsersNearby({
+         user_id: UserStore.user.user_id,
+         radius: currentRadius,
+         ...UserStore.location
+      });
       game.clearCircles();
-      game?.pointsByCoordinate({ lat: UserStore.user.lat, lon: UserStore.user.lon }, radius.value * 1000, data);
+      game.pointsByCoordinate(UserStore.location, radius.value * 1000, users);
    }
 }
 

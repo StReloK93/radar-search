@@ -1,5 +1,5 @@
-import { Text, Ticker } from "pixi.js";
-import type { IPoint } from "../../Interfaces";
+import { Application, Assets, Container, Graphics, Text, Ticker } from "pixi.js";
+import type { ICoordinate } from "../../Interfaces";
 export function FPSIndicator() {
    const fpsText = new Text({
       text: "FPS: 0",
@@ -45,9 +45,9 @@ export function projectToRadar(point: { lat: number; lon: number }, center: { la
    };
 }
 
-export function generateRandomPoints(center: IPoint, radiusKm: number, count: number): IPoint[] {
+export function generateRandomPoints(center: ICoordinate, radiusKm: number, count: number): ICoordinate[] {
    const earthRadius = 6371; // Yer radiusi (km)
-   const points: IPoint[] = [];
+   const points: ICoordinate[] = [];
 
    for (let i = 0; i < count; i++) {
       // 0 - 1 oralig‘ida random radius (kvadrat ildiz olamiz — nuqtalar teng taqsimlansin)
@@ -94,4 +94,40 @@ export function requestUserLocation(
       },
       { enableHighAccuracy: true, timeout: 10000 }
    );
+}
+
+export async function createBouncyDot(x: number, y: number, avatarUrl: string, application: Application) {
+   const container = new Container();
+   container.x = x;
+   container.y = y;
+   container.eventMode = "static";
+   container.cursor = "pointer";
+
+   const texture = await Assets.load({ src: avatarUrl, parser: "texture" });
+   const circle = new Graphics().circle(0, 0, 20).fill(texture).stroke({ width: 1, color: "#000" });
+   container.scale.set(0);
+
+   container.addChild(circle);
+
+   let progress = 0;
+   const speed = 0.05; // animatsiya tezligi
+   const overshoot = 1.4; // 20% kattaroq chiqib qaytadi
+   // Har bir dot uchun alohida ticker emas, bitta global ticker
+   application.ticker.add(() => {
+      if (progress >= 1) return;
+
+      progress += speed;
+
+      let scale: number;
+      if (progress < 0.7) {
+         scale = (progress / 0.7) * overshoot;
+      } else {
+         const t = (progress - 0.7) / 0.3;
+         scale = overshoot - (overshoot - 1) * t;
+      }
+
+      container.scale.set(scale);
+   });
+
+   return container;
 }

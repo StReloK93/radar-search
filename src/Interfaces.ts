@@ -7,46 +7,23 @@ export interface ICircleAnimation {
    circle: Graphics;
 }
 
-export interface IPoint {
+export interface ICoordinate {
    lat: number;
    lon: number;
 }
 
-export interface IUser {
-   first_name: string;
-   last_name: string;
-   username: string;
-   user_id: number;
-   photo: string;
-   photo_url: string;
+export interface IUser extends IAuthUser, ICoordinate {
    last_active_time?: string | null;
-   lat: number;
-   lon: number;
-}
-
-export interface IUserDist {
-   first_name: string;
-   last_name: string;
-   username: string;
-   user_id: number;
    photo: string;
-   photo_url: string;
-   lat: number;
-   lon: number;
    x: number;
    y: number;
    dist: number;
 }
 
 export interface IAuthUser {
-   added_to_attachment_menu?: boolean | undefined;
    first_name: string;
+   last_name: string;
+   username: string;
    user_id: number;
-   is_bot?: boolean | undefined;
-   is_premium?: boolean | undefined;
-   last_name?: string | undefined;
-   photo_url?: string | undefined;
-   username?: string | undefined;
-   lat: number | null;
-   lon: number | null;
+   photo_url: string;
 }
